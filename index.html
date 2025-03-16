@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website PASKIBRA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<body>
+    <header>
+        <div class="content"></div>
+        
+        <h1 class="logo">HAWKINSBOTH</h1>
+        <nav class="navigation">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="https://wa.me/6281919958196" target="blank" class="hooper">Contact</a>
+            <button class="btnlogin-popup">DAFTAR</button>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="content">
+            <img src="hawkins-logo-png_seeklogo-305041.png" alt="Logo Hawkinsboth" class="logo1">
+            <h2>SELAMAT DATANG DI WEBSITE HAWKINSBOTH</h2>
+            <p>Memberikan informasi tentang elektronika dan mekanisme robot</p>
+        </div>
+    
+        <div class="logreg-box">
+            <form>
+                <div class="form-group">
+                    <label for="username">username:</label>
+                    <input type="text" id="username" placeholder="Masukkan username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password  :</label>
+                    <input type="password" id="password" placeholder="Masukkan password">
+                </div>
+                <div class="form-group">
+                    <button type="submit">MASUK</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const usernameInput = document.getElementById("username").value;
+            const passwordInput = document.getElementById("password").value;
+
+            const validUsername = "najmi";
+            const validPassword = "123";
+
+
+            if (usernameInput === validUsername && passwordInput === validPassword) {
+                localStorage.setItem("isLoggedIn", "true"); // Simpan status login
+                alert("Login Berhasil!");
+                console.log("Redirecting to dashboard.html");
+                window.location.href = "pages/dashboard.html"; // Redirect ke dashboard yang benar
+            } else {
+                alert("Username atau Password salah!");
+            }
+        });
+    });
+</script>
+</body>
+</html>
+
