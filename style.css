@@ -98,6 +98,11 @@ header {
     background-size: cover;
 }
 
+body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
 .logreg-box {  /*kotak login*/
     position: absolute;
     top: 70%; /* Dari 50% menjadi 60% agar lebih turun */
@@ -107,7 +112,7 @@ header {
     padding: 20px;
     background: rgba(226, 226, 226, 0.2);
     border-radius: 10px;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: center;
@@ -147,7 +152,7 @@ header {
     border-radius: 25px;
     cursor: pointer;
     transition: 0.3s;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
 }
 
 .form-group button:hover {
@@ -157,7 +162,7 @@ header {
 
 .content { /*sambutan selamat datang*/
     position: absolute;
-    top: 20%; /* Dari 25% menjadi 35% agar lebih turun */
+    top: 29%; /* Dari 25% menjadi 35% agar lebih turun */
     text-align: center;
     font-size-adjust: 100PX;
     color: rgb(255, 255, 255);
@@ -192,7 +197,7 @@ header {
 }
 
 .logo1 {
-    width: 250px; /* Sesuaikan ukuran */
+    width: 200px; /* Sesuaikan ukuran */
     display: block;
     margin: 0 auto 10px;
     position: relative;
@@ -200,9 +205,9 @@ header {
 }
 
 /* Responsif untuk HP */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 10000px) {
     body {
-        font-size: 16px;
+        font-size: 10px;
         flex-direction: column;
         align-items: center;
     }
@@ -214,7 +219,63 @@ header {
     }
 
     .hooper, .logout {
-        width: 80%;
+        width: 0%;
         max-width: 250px;
     }
-}
+
+    .navigation .btnlogin-popup{
+        width: 100px;
+        max-width: 200;
+    }
+
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 6px 100px rgba(0, 0, 0, 0.4);
+        text-align: center;
+    }
+    
+    .logo {
+        font-size: 2.2em;
+        color: rgb(255, 255, 255);
+        font-weight: bold;
+        margin-bottom: 10px; /* Menjaga jarak antara judul dan menu */
+    }
+    
+    header {
+        display: flex;
+        font-size: 12px;
+        flex-direction: column; /* Biar logo dan menu ada di dua baris */
+        align-items: center;
+        text-align: center;
+        padding: 15px 50px; /* Atur padding biar lebih rapi */
+    }
+    
+    .navigation {
+        display: flex;
+        justify-content: center;
+        gap: 30px; /* Jarak antar menu */
+        margin-top: 10px; /* Sesuaikan dengan kebutuhan */
+    }
+    
+    .navigation a {
+        font-size: 1.2em;
+        padding: 5px 10px;
+    }
+    
+    .navigation .btnlogin-popup {
+        display: inline-block;
+        margin-top: 15px; /* Jarak tombol dari menu */
+        padding: 10px 20px;
+    }
+    
