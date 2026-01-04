@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Klasemen | Futsal League Purwakarta</title>
+<script src="data.js"></script>
+
+<style>
+:root{
+    --bg:#020617;
+    --card:#020617;
+    --accent:#3b82f6;
+    --text:#e5e7eb;
+    --muted:#9ca3af;
+    --line:#1f2933;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:'Segoe UI', Arial, sans-serif;
+    background:#020617;
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:20px;
+}
+.container{
+    width:100%;
+    max-width:900px;
+}
+.header{
+    text-align:center;
+    margin-bottom:16px;
+}
+.header h1{
+    margin:0;
+    font-size:22px;
+}
+.header p{
+    margin:4px 0 0;
+    color:var(--muted);
+    font-size:12px;
+}
+.card{
+    background:#020617;
+    border-radius:16px;
+    padding:16px;
+    box-shadow:0 20px 40px rgba(0,0,0,.6);
+}
+select{
+    padding:10px;
+    border-radius:10px;
+    background:#020617;
+    color:var(--text);
+    border:1px solid var(--line);
+    margin-bottom:12px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+}
+th{
+    background:rgba(59,130,246,.15);
+    color:#93c5fd;
+    padding:8px 6px;
+    border-bottom:1px solid var(--line);
+    white-space:nowrap;
+}
+td{
+    padding:8px 6px;
+    border-bottom:1px solid var(--line);
+    text-align:center;
+}
+td.club{
+    text-align:left;
+}
+td.pos{
+    font-weight:700;
+    color:#60a5fa;
+}
+td.point{
+    font-weight:700;
+    color:#facc15;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+    <h1>FUTSAL LEAGUE PURWAKARTA</h1>
+    <p>KLASEMEN SEMENTARA</p>
+</div>
+
+<div class="card">
+
+<select id="group" onchange="renderTable()">
+    <option value="U15A">Grup A · U-15</option>
+    <option value="U18A">Grup A · U-18</option>
+    <option value="U18B">Grup B · U-18</option>
+</select>
+
+<table>
+<thead>
+<tr>
+    <th>Pos</th>
+    <th>Club</th>
+    <th>Main</th>
+    <th>W</th>
+    <th>D</th>
+    <th>L</th>
+    <th>GM</th>
+    <th>GK</th>
+    <th>SG</th>
+    <th>Point</th>
+</tr>
+</thead>
+<tbody id="standings"></tbody>
+</table>
+
+</div>
+
+</div>
+
+<script>
+function renderTable(){
+    const g = group.value;
+
+    const data = Object.entries(groups[g].teams).sort((a,b)=>
+        b[1].pts - a[1].pts ||
+        (b[1].gf - b[1].ga) - (a[1].gf - a[1].ga) ||
+        b[1].gf - a[1].gf
+    );
+
+    standings.innerHTML = "";
+
+    data.forEach((item, i) => {
+        const d = item[1];
+        standings.innerHTML += `
+        <tr>
+            <td class="pos">${i+1}</td>
+            <td class="club">${item[0]}</td>
+            <td>${d.mp}</td>
+            <td>${d.w}</td>
+            <td>${d.d}</td>
+            <td>${d.l}</td>
+            <td>${d.gf}</td>
+            <td>${d.ga}</td>
+            <td>${d.gf - d.ga}</td>
+            <td class="point">${d.pts}</td>
+        </tr>`;
+    });
+}
+renderTable();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel | Futsal League Purwakarta</title>
+<script src="data.js"></script>
+
+<style>
+:root{
+    --bg:#0f172a;
+    --card:#111827;
+    --accent:#3b82f6;
+    --text:#e5e7eb;
+    --muted:#9ca3af;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:#020617;
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.container{width:100%;max-width:420px}
+.card{
+    background:var(--card);
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 20px 40px rgba(0,0,0,.6);
+    margin-bottom:20px;
+}
+h1,h2{text-align:center;margin:0 0 14px}
+h1{font-size:22px}
+h2{font-size:14px;color:var(--muted)}
+label{font-size:13px;color:var(--muted)}
+input,select,button{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border-radius:10px;
+    border:none;
+    font-size:14px;
+}
+input,select{
+    background:#020617;
+    color:var(--text);
+    border:1px solid #1f2933;
+}
+button{
+    margin-top:14px;
+    background:linear-gradient(135deg,var(--accent),#2563eb);
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
+}
+button.danger{background:#dc2626}
+.hidden{display:none}
+hr{border:1px solid #1f2933;margin:14px 0}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LOGIN -->
+<div id="login" class="card">
+    <h1>🔐 ADMIN LOGIN</h1>
+    <h2>Futsal League Purwakarta</h2>
+
+    <label>Username</label>
+    <input id="user">
+
+    <label>Password</label>
+    <input id="pass" type="password">
+
+    <button onclick="login()">Masuk Panel</button>
+</div>
+
+<!-- PANEL -->
+<div id="panel" class="hidden">
+
+    <div class="card">
+        <h1>⚙️ PANEL PANITIA</h1>
+
+        <label>Pilih Grup</label>
+        <select id="group" onchange="refresh()">
+            <option value="U15A">Grup A - U15</option>
+            <option value="U18A">Grup A - U18</option>
+            <option value="U18B">Grup B - U18</option>
+        </select>
+    </div>
+
+    <div class="card">
+        <h1>➕ / 🗑️ Kelola Tim</h1>
+
+        <input id="teamName" placeholder="Nama Tim Baru">
+        <button onclick="addTeam()">Tambah Tim</button>
+
+        <hr>
+
+        <label>Hapus Tim</label>
+        <select id="deleteTeamSelect"></select>
+        <button class="danger" onclick="removeTeam()">Hapus Tim</button>
+    </div>
+
+    <div class="card">
+        <h1>⚽ Input Skor</h1>
+
+        <label>Tim A</label>
+        <select id="A"></select>
+        <input id="gA" type="number" placeholder="Gol Tim A">
+
+        <label>Tim B</label>
+        <select id="B"></select>
+        <input id="gB" type="number" placeholder="Gol Tim B">
+
+        <button onclick="addMatch()">Simpan Hasil</button>
+    </div>
+
+</div>
+
+</div>
+
+<script>
+const USER="admin";
+const PASS="12345";
+
+/* LOGIN */
+function login(){
+    if(user.value===USER && pass.value===PASS){
+        document.getElementById("login").style.display="none";
+        document.getElementById("panel").classList.remove("hidden");
+        refresh();
+    }else{
+        alert("Username / Password salah");
+    }
+}
+
+/* REFRESH DROPDOWN */
+function refresh(){
+    const g=document.getElementById("group").value;
+    const A=document.getElementById("A");
+    const B=document.getElementById("B");
+    const del=document.getElementById("deleteTeamSelect");
+
+    A.innerHTML=B.innerHTML=del.innerHTML="";
+
+    Object.keys(groups[g].teams).forEach(team=>{
+        A.innerHTML+=`<option value="${team}">${team}</option>`;
+        B.innerHTML+=`<option value="${team}">${team}</option>`;
+        del.innerHTML+=`<option value="${team}">${team}</option>`;
+    });
+}
+
+/* TAMBAH TIM */
+function addTeam(){
+    const g=group.value;
+    const team=teamName.value.trim();
+    if(!team) return alert("Nama tim kosong!");
+    if(groups[g].teams[team]) return alert("Tim sudah ada!");
+
+    groups[g].teams[team]={mp:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};
+    saveData(groups);
+    teamName.value="";
+    refresh();
+}
+
+/* HAPUS TIM */
+function removeTeam(){
+    const g=group.value;
+    const team=deleteTeamSelect.value;
+    if(!team) return;
+
+    if(confirm(`Yakin hapus tim "${team}"?`)){
+        delete groups[g].teams[team];
+        delete groups[g].scorers[team];
+        saveData(groups);
+        refresh();
+    }
+}
+
+/* INPUT SKOR */
+function addMatch(){
+    const g=group.value;
+    const Ateam=A.value;
+    const Bteam=B.value;
+    const ga=+gA.value;
+    const gb=+gB.value;
+    if(Ateam===Bteam) return alert("Tim sama!");
+
+    const tA=groups[g].teams[Ateam];
+    const tB=groups[g].teams[Bteam];
+
+    tA.mp++; tB.mp++;
+    tA.gf+=ga; tA.ga+=gb;
+    tB.gf+=gb; tB.ga+=ga;
+
+    if(ga>gb){tA.w++;tA.pts+=3;tB.l++;}
+    else if(ga<gb){tB.w++;tB.pts+=3;tA.l++;}
+    else{tA.d++;tB.d++;tA.pts++;tB.pts++;}
+
+    groups[g].scorers[Ateam]=(groups[g].scorers[Ateam]||0)+ga;
+    groups[g].scorers[Bteam]=(groups[g].scorers[Bteam]||0)+gb;
+
+    saveData(groups);
+    gA.value=gB.value="";
+}
+</script>
+
+</body>
+</html>
